@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 220 20% 6%;
+  --foreground: 220 10% 95%;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #080818;
+  color: #e8e8f0;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #0f0f1a; }
+::-webkit-scrollbar-thumb { background: #2d2d5a; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #4f4f8a; }
+
+@layer components {
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl;
+  }
+  .surface {
+    @apply bg-[#12121f] border border-[#1e1e3a] rounded-2xl;
+  }
+  .surface-hover {
+    @apply hover:bg-[#16162b] hover:border-[#2a2a4a] transition-all duration-200;
+  }
+  .btn-primary {
+    @apply bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-xl transition-all duration-200 text-sm flex items-center gap-2;
+  }
+  .btn-secondary {
+    @apply bg-white/5 hover:bg-white/10 text-white font-medium px-4 py-2 rounded-xl border border-white/10 transition-all duration-200 text-sm flex items-center gap-2;
+  }
+  .btn-danger {
+    @apply bg-red-600/20 hover:bg-red-600/30 text-red-400 font-medium px-4 py-2 rounded-xl border border-red-500/20 transition-all duration-200 text-sm flex items-center gap-2;
+  }
+  .input {
+    @apply bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/30 focus:outline-none focus:border-indigo-500/50 transition-all duration-200 text-sm w-full;
+  }
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border;
+  }
+  .stat-card {
+    @apply surface p-6 flex flex-col gap-2 surface-hover cursor-default;
+  }
+  .page-header {
+    @apply flex items-center justify-between mb-8;
+  }
+  .page-title {
+    @apply text-2xl font-bold text-white;
+  }
+  .section-title {
+    @apply text-lg font-semibold text-white mb-4;
+  }
+}

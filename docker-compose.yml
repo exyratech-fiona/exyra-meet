@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  # ─── MySQL (already running locally, but included for full Docker deployment) ───
+  mysql:
+    image: mysql:8.0
+    container_name: exyra_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: exyra_root_2024
+      MYSQL_DATABASE: exyra_meet
+      MYSQL_USER: exyra
+      MYSQL_PASSWORD: exyra_pass_2024
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "exyra", "-pexyra_pass_2024"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Backend ───────────────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: exyra_backend
+    restart: unless-stopped
+    env_file: ./backend/.env
+    environment:
+      # When running via compose with mysql service: use "mysql" hostname
+      # When MySQL is external (already running locally): use "host.docker.internal"
+      DATABASE_URL: mysql+aiomysql://exyra:exyra_pass_2024@host.docker.internal:3306/exyra_meet
+      DATABASE_URL_SYNC: mysql+pymysql://exyra:exyra_pass_2024@host.docker.internal:3306/exyra_meet
+    ports:
+      - "8000:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./backend/credentials:/app/credentials:ro
+
+  # ─── Frontend ──────────────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # Build-time: baked into JS bundle (browser calls this URL)
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+    container_name: exyra_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:

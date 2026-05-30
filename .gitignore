@@ -1,0 +1,27 @@
+# Backups
+backups/
+
+# Environment files (contain secrets)
+backend/.env
+frontend/.env.local
+
+# Python
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/**/*.pyc
+
+# Google credentials (sensitive — service_account.json is safe to commit)
+backend/credentials/token.json
+backend/credentials/client_secret.json
+
+# Node
+frontend/node_modules/
+frontend/.next/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
